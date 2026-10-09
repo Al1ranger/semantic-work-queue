@@ -24,7 +24,8 @@ Network quorum is not unanimity; some validator receipts contained errors.
 | Enroll authenticated worker | [0x0008…fa9d](https://explorer-studio.genlayer.com/tx/0x000895ef6116194b7b806f1ca0a43520d321e8173d47f75ca51fdfaa577efa9d) | MODALITY enrollment executed |
 | Claim FIFO head | [0x320a…c7e0](https://explorer-studio.genlayer.com/tx/0x320ae3f4e71a3f6b042761659dc086da08fa46c8bc2ca37e3058fee8d8bac7e0) | LEASED; generation 1, same authenticated worker; token/root/bindings checked |
 | Delivery acknowledgement | [0xf81a…1a19](https://explorer-studio.genlayer.com/tx/0xf81adfcad0772c53d7e4e18bf9dfac8138f3c07dc12d04d8cc733ecf50b01a19) | ACKED; MODALITY head=tail=1, no head job; delivery receipt only |
-| Submit wrong-commitment negative job | [0x142a…8d18](https://explorer-studio.genlayer.com/tx/0x142af7b69a943baccbb6af5b68cecae0722bae595af6e167e144a14c98048d18) | SUBMITTED only; no rejection or closure proof yet |
+| Submit wrong-commitment negative job | [0x142a…8d18](https://explorer-studio.genlayer.com/tx/0x142af7b69a943baccbb6af5b68cecae0722bae595af6e167e144a14c98048d18) | SUBMITTED; this receipt does not prove hash rejection |
+| Expire unresolved job after deadline | [0xdd44…de87](https://explorer-studio.genlayer.com/tx/0xdd445ed651dcc0d02527b2df563b632338eb63c1758aec51597c29e52f99de87) | DEAD, reason DEADLINE; definition root and job binding independently checked; no lane insertion |
 
 Normal job key: `4f9c77be98aaf0b9e98225902622ab7eb95ea4332cf578d03f4e896e05201425`.
 Negative job key: `0b1242857aec7f7302bfc3c45b9c873f06e5482e5ca16d4bb26df1a9324e8354`.
@@ -52,7 +53,8 @@ it sends no transaction. These are not distributed disagreement experiments.
 | Worker/lane identity and acknowledgement binding | PASS | PASS: enrolled worker claimed and ACKed bound lease |
 | Expired lease redelivery fences previous ACK | PASS | Not run |
 | Third expired lease permissionlessly dead-letters | PASS | Not run |
-| Unresolved deadline expiry, bounded prune | PASS | Not run |
+| Unresolved deadline expiry | PASS | PASS: tampered-live -> DEAD / DEADLINE |
+| Bounded prune | PASS | Not run |
 | Exact report mismatch rejects equivalence | PASS helper | Distributed disagreement not run |
 
 ## Recovery and excluded attempts
@@ -66,6 +68,7 @@ On continuation, one CLI command stopped before loading its relative-path signer
 The correctly scoped negative route then failed during the read-only nonce lookup,
 before broadcast. No transaction is claimed for either failed command. Public
 DNS subsequently returned ENOTFOUND; permission-review checks also timed out.
-The negative job deadline has passed; permissionless expire can close it once RPC
-connectivity returns. Its last verified state was SUBMITTED. No rejection,
-redelivery, stale-token rejection or deadline-closure live proof is fabricated.
+After native RPC connectivity recovered, permissionless expiry finalized
+successfully. An independent read verified DEAD / DEADLINE and intact definition
+bindings. This is a deadline-closure proof, not a semantic hash-rejection proof.
+No redelivery or stale-token rejection live proof is claimed.

@@ -112,8 +112,8 @@ steward acceptance or points guaranteed.
 [StudioNet contract](https://explorer-studio.genlayer.com/address/0x8983539344F0E03D459C969bACDd25c560EfD32d)
 matches this source. The RFC 2119 lifecycle independently routed into MODALITY,
 leased its head to an enrolled worker and reached ACKED with an empty lane.
-Seven finalized successful receipts are documented; the negative job has only
-a submission proof, not a rejection proof. 30 mocked direct tests and one mocked
+Eight finalized successful receipts are documented; the unresolved negative job
+was closed after its deadline, not semantically rejected. 30 mocked direct tests and one mocked
 one-shot transport test pass. See the ledger for unrun live cases and recovery.
 
 The Node-native `scripts/broadcast_once.cjs` is an alternative to the Windows

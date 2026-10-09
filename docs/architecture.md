@@ -8,8 +8,10 @@ The caller cannot provide a document, routing topic, priority, worker or confide
 Commitment equality alone does not route: substantive topic classification controls
 which lane receives the job. All validators refetch the body and rerun the task.
 The report binds deployment, creator/id, policy, source, attempt and observer time.
-UNKNOWN quarantines instead of routing. Disagreement aborts the write, not a fake
-CONFLICTED record. A deadline always permits permissionless terminal closure.
+UNKNOWN quarantines instead of routing. Failed network consensus aborts the write,
+not a fake CONFLICTED record. An individual validator's mismatch rejects its
+equivalence vote; the network uses quorum, not unanimity. A deadline always
+permits permissionless terminal closure.
 
 ## Architectural difference
 

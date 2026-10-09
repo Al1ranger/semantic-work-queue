@@ -33,7 +33,8 @@ LEASED -> new fenced lease after expiry -> DEAD after third expired lease
 Leader and validators independently fetch full RFC Editor bodies, recompute raw
 SHA-256, enforce the exact RFC header/UTF-8/size and infer primary purpose from
 the full content. Exact equality covers the whole decision-bearing report. No
-confidence tolerance. UNKNOWN quarantines; disagreement applies no write.
+confidence tolerance. UNKNOWN quarantines; failure to obtain network consensus
+applies no write. Network quorum is not unanimity of all validators.
 Malformed AI response is not counted as successful consensus. Three unavailable
 acquisitions dead-letter a job; all unresolved jobs can expire at deadline.
 
@@ -55,6 +56,7 @@ python -m venv .venv
 .venv/Scripts/python -m pip install -r requirements.txt
 .venv/Scripts/genvm-lint check contracts/SemanticWorkQueue.py --json
 .venv/Scripts/python -m pytest tests -q
+node --test tests/broadcast_once.test.cjs
 npm ci
 npm install -g genlayer@0.39.2
 genlayer network set studionet
@@ -104,3 +106,19 @@ Signing remains in an encrypted keystore. StudioNet is gasless; no transfers.
 See [architecture](docs/architecture.md), [security](SECURITY.md) and
 [proof matrix](LIVE_PROOFS.md). No production audit, unique invention claim,
 steward acceptance or points guaranteed.
+
+## Verified deployment
+
+[StudioNet contract](https://explorer-studio.genlayer.com/address/0x8983539344F0E03D459C969bACDd25c560EfD32d)
+matches this source. The RFC 2119 lifecycle independently routed into MODALITY,
+leased its head to an enrolled worker and reached ACKED with an empty lane.
+Seven finalized successful receipts are documented; the negative job has only
+a submission proof, not a rejection proof. 30 mocked direct tests and one mocked
+one-shot transport test pass. See the ledger for unrun live cases and recovery.
+
+The Node-native `scripts/broadcast_once.cjs` is an alternative to the Windows
+native bridge when Schannel/OS credentials are unavailable. Require it explicitly
+before invoking the CLI; it caches success and unknown failure for each already
+signed payload. It never reads keys or signs. `recover.mjs PUBLIC_WALLET` reads
+nonce/history metadata only before any decision to retransmit. Native keystore
+access may require running the CLI outside a restricted Windows logon token.

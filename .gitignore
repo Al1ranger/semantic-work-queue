@@ -1,0 +1,11 @@
+.venv/
+node_modules/
+__pycache__/
+.pytest_cache/
+.env
+.env.*
+*.key
+*.pem
+*keystore*
+*.log
+.gltest_cache/
